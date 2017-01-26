@@ -8,9 +8,9 @@ object WordSimilarityHandler extends Serializable {
   // Main method invoked from the Spark Shell
   def main(args: Array[String]): Unit = {
 
-    // Check if the HDFS path is supplied. If not, error out stating missing HDFS Path
-    if (args.length < 2) {
-      println("Usage: WordSimilarityHandler <Input HDFS Path> <Output HDFS Path>")
+    // Check if the input arguments match the expected count of arguments
+    if (args.length < 3) {
+      println("Usage: WordSimilarityHandler <Input HDFS Path> <Output HDFS Path> <Partition Count>")
       sys.exit(1)
     }
 
@@ -24,7 +24,7 @@ object WordSimilarityHandler extends Serializable {
     val outputHdfsPath = args(1)
 
     val sc = SparkSingletons.sparkContext
-    val rdd = sc.wholeTextFiles(inputHdfsPath, 4)
+    val rdd = sc.wholeTextFiles(inputHdfsPath, args(3).toInt)
     val simStringBuilder = new StringBuilder("\n")
 
     //  Parse the document and save the G2Test result at the supplied output HDFS location
