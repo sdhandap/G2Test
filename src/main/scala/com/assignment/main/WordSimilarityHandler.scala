@@ -14,6 +14,7 @@ object WordSimilarityHandler extends Serializable {
       sys.exit(1)
     }
 
+    // Check the format of HDFS path
     if (!args(0).toLowerCase.startsWith("hdfs://") || !args(1).toLowerCase.startsWith("hdfs://")) {
       println("HDFS Path should start with hdfs://. Fix the hdfs path and restart the process.")
       sys.exit(1)
@@ -26,7 +27,7 @@ object WordSimilarityHandler extends Serializable {
     val rdd = sc.wholeTextFiles(inputHdfsPath, 4)
     val simStringBuilder = new StringBuilder("\n")
 
-
+    //  Parse the document and save the G2Test result at the supplied output HDFS location
     rdd.map { p =>
       val dp = new DocumentParser()
       dp.parseDocument(p._2).wordCombSim.foreach { s =>
